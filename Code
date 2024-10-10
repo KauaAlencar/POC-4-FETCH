@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Pokémons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #pokemon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        img {
+            max-width: 300px; 
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gerador aleatório de Pokémon</h1>
+    <p>Clique no botão para gerar um Pokémon</p>
+
+    <button id="fetch-button">Gerar Pokémon</button>
+    <div id="pokemon-container">
+        <h2 id="nome-pokemon" style="display:none;"></h2>
+        <img id="imagem-pokemon" src="" alt="Pokémon aleatório" style="display:none;">
+    </div>
+
+    <script>
+        document.getElementById('fetch-button').addEventListener('click', () => {
+            const maxPokemon = 1010; 
+            const randomId = Math.floor(Math.random() * maxPokemon) + 1;
+            const apiUrl = `https://pokeapi.co/api/v2/pokemon/${randomId}`;
+
+            
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const pokemonNome = document.getElementById('nome-pokemon');
+                    const pokemonImagem = document.getElementById('imagem-pokemon');
+
+                    pokemonNome.textContent = `#${data.id} - ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
+                    pokemonImagem.src = data.sprites.front_default; 
+                    pokemonNome.style.display = 'block';
+                    pokemonImagem.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar Pokémon:', error);
+                });
+        });
+    </script>
+
+</body>
+</html>
